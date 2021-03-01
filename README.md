@@ -1,5 +1,9 @@
 # TechExperiments1
 
+## Deploying
+If you have modified `config/prod.secret.exs` push it to prod with
+`scp config/prod.secret.exs tech_experiments_1:~/tech_experiments_1/config/`
+
 To start your Phoenix server:
 
   * Setup the project with `mix setup`
