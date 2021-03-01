@@ -15,6 +15,8 @@ defmodule TechExperiments1Web.ConnCase do
   this option is not recommended for other databases.
   """
 
+  alias Ecto.Adapters.SQL.Sandbox
+
   use ExUnit.CaseTemplate
 
   using do
@@ -32,10 +34,10 @@ defmodule TechExperiments1Web.ConnCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(TechExperiments1.Repo)
+    :ok = Sandbox.checkout(TechExperiments1.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(TechExperiments1.Repo, {:shared, self()})
+      Sandbox.mode(TechExperiments1.Repo, {:shared, self()})
     end
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}

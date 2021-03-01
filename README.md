@@ -1,6 +1,27 @@
 # TechExperiments1
 
+## Domain
+
+[tech-experiments-1.makeawesomestuff.com](tech-experiments-1.makeawesomestuff.com)
+
+## Code analysis
+
+This should run automatically if you have Credo visual studio plugin
+
+`mix credo` or `mix credo --strict`
+
+`--scrict` includes low priority issues
+
+For more details on a particular issue:
+`mix credo lib/credo/check.ex:306`
+
+## Debugging
+
+Checking subdomain
+`nslookup -type=A tech-experiments-1.makeawesomeworkshop.com`
+
 ## Deploying
+
 If you have modified `config/prod.secret.exs` push it to prod with
 `scp config/prod.secret.exs tech_experiments_1:~/tech_experiments_1/config/`
 
@@ -20,3 +41,13 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
   * Docs: https://hexdocs.pm/phoenix
   * Forum: https://elixirforum.com/c/phoenix-forum
   * Source: https://github.com/phoenixframework/phoenix
+
+
+
+successfully:
+# get the assets ready
+cd assets && npm install && cd ../
+npm run deploy --prefix ./assets
+MIX_ENV=prod mix phx.digest
+# run the app on port 4000
+PORT=4000 MIX_ENV=prod mix phx.server
