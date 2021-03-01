@@ -43,11 +43,3 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
   * Source: https://github.com/phoenixframework/phoenix
 
 
-
-successfully:
-# get the assets ready
-cd assets && npm install && cd ../
-npm run deploy --prefix ./assets
-MIX_ENV=prod mix phx.digest
-# run the app on port 4000
-PORT=4000 MIX_ENV=prod mix phx.server
