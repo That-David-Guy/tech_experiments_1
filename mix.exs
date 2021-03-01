@@ -1,4 +1,8 @@
 defmodule TechExperiments1.MixProject do
+  @moduledoc """
+  Mix file for the project
+  """
+
   use Mix.Project
 
   def project do

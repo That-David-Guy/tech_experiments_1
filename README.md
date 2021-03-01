@@ -17,13 +17,29 @@ For more details on a particular issue:
 
 ## Debugging
 
-Checking subdomain
+Checking subdomain DNS
 `nslookup -type=A tech-experiments-1.makeawesomeworkshop.com`
+
+Check logs in prod (real time)
+`ssh tech_experiments_1 journalctl -f`
+
+Check logs in prod (most recent N times)
+`ssh tech_experiments_1 journalctl -n 500`
+
+To limit to just your app
+`ssh tech_experiments_1 journalctl -n 500 -u tech_experiments_1@4001` (or 4000)
+
 
 ## Deploying
 
+`ssh tech_experiments_1 ./deploy.sh` from you local machine
+
+
 If you have modified `config/prod.secret.exs` push it to prod with
 `scp config/prod.secret.exs tech_experiments_1:~/tech_experiments_1/config/`
+
+
+
 
 To start your Phoenix server:
 
