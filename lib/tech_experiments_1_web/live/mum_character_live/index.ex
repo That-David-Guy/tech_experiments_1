@@ -52,7 +52,10 @@ defmodule TechExperiments1Web.MUMCharacterLive.Index do
 
   @impl true
   def handle_info({:mum_character_updated, character}, socket) do
-    {:noreply, update(socket, :mum_characters, fn characters -> [character | characters] end)}
+    # NOTE: If we weren't deleteing we could follow the same lines as in :mum_character_created
+    {:noreply, update(socket, :mum_characters, fn characters ->
+      Enum.map(characters, fn(c) -> if c.id == character.id do character else c end end)
+    end)}
   end
 
   @impl true

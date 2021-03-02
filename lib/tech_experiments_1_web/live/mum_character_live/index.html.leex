@@ -10,8 +10,22 @@
     return_to: Routes.mum_character_index_path(@socket, :index) %>
 <% end %>
 
-<a href="#" phx-click="mum_quick_create">Add Player</a> ||
-<a href="#" phx-click="mum_quick_delete">Remove Player</a>
+<%= cond do %>
+  <%= Enum.count(@mum_characters) <= 0 -> %>
+    <a href="#" phx-click="mum_quick_create">Add Player</a> ||
+    Remove Player
+
+  <%= Enum.count(@mum_characters) >= 6 -> %>
+    Add Player ||
+    <a href="#" phx-click="mum_quick_delete">Remove Player</a>
+
+  <%= true -> %>
+    <a href="#" phx-click="mum_quick_create">Add Player</a> ||
+    <a href="#" phx-click="mum_quick_delete">Remove Player</a>
+
+
+
+<% end %>
 
 <div id="map_containter"
   style="width: 760px;

@@ -66,8 +66,8 @@ defmodule TechExperiments1.MUM do
       i = rem(x, 6) + 1 # Only 6 portraits
       %{
         graphic: "portrait_#{i}.jpg",
-        position_x: 42,
-        position_y: 42
+        position_x: :rand.uniform(760),
+        position_y: :rand.uniform(760)
       }
     end
 

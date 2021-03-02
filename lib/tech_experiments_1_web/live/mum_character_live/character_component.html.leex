@@ -2,7 +2,7 @@
     style=" position: absolute;
             left: <%=@character.position_x%>px;
             top: <%=@character.position_y%>px;" >
-    <img style="width: 25%; display: block;"
+    <img style="width: 60px; display: block;"
         src="<%= Routes.static_path(@socket, "/mum/" <> @character.graphic)%>">
 
     <a href="#" class="button" phx-click="teleport" phx-target="<%= @myself %>">🎉</a>
