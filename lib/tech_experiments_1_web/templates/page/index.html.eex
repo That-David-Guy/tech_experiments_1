@@ -8,7 +8,7 @@
     <ul>
       <li>
         <%= link "Multi User Map", to: Routes.mum_character_path(@conn, :index) %>
-        People share a map and can move characters around.
+        Sync player movement with Phoenix LiveView
       </li>
     </ul>
   </article>
