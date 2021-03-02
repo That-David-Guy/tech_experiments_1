@@ -1,5 +1,7 @@
 # TechExperiments1
 
+[http://134.209.104.156](http://134.209.104.156)
+
 ## Domain
 
 [tech-experiments-1.makeawesomestuff.com](tech-experiments-1.makeawesomestuff.com)
@@ -34,6 +36,15 @@ To limit to just your app
 
 `git push` (prod takes from `main` branch on git)
 `ssh tech_experiments_1 ./deploy.sh` from you local machine
+
+
+## Rollback
+
+You can rollback 1 version
+`ssh tech_experiments_1 ./rollback.sh`
+
+If you need to rollback the migration (this won't always be the case)
+`MIX_ENV=prod mix ecto.rollback` (ON PROD SERVER)
 
 
 If you have modified `config/prod.secret.exs` push it to prod with
