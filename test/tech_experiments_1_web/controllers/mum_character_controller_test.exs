@@ -1,4 +1,7 @@
 defmodule TechExperiments1Web.MUMCharacterControllerTest do
+  @moduledoc """
+  Test file
+  """
   use TechExperiments1Web.ConnCase
 
   alias TechExperiments1.MUM
@@ -15,7 +18,7 @@ defmodule TechExperiments1Web.MUMCharacterControllerTest do
   describe "index" do
     test "lists all mum_characters", %{conn: conn} do
       conn = get(conn, Routes.mum_character_path(conn, :index))
-      assert html_response(conn, 200) =~ "Listing Mum characters"
+      assert html_response(conn, 200) =~ "Multi User Map"
     end
   end
 

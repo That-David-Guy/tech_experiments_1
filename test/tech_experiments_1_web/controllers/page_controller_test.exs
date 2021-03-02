@@ -6,6 +6,6 @@ defmodule TechExperiments1Web.PageControllerTest do
 
   test "GET /", %{conn: conn} do
     conn = get(conn, "/")
-    assert html_response(conn, 200) =~ "Small Tech Experiments"
+    assert html_response(conn, 200) =~ "Multi User Map"
   end
 end

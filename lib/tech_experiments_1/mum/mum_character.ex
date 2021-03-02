@@ -1,4 +1,8 @@
 defmodule TechExperiments1.MUM.MUMCharacter do
+  @moduledoc """
+  A character that can be moved around a map
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 
