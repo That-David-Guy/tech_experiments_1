@@ -20,15 +20,11 @@
         position: relative;">
 
   <%= for character <- @mum_characters do %>
-    <img
-      id="character_<%=character.id%>"
-      style="width: 10%;
-            position: absolute;
-            left: <%=character.position_x%>px;
-            top: <%=character.position_y%>px;"
-      src="<%= Routes.static_path(@socket, "/mum/" <> character.graphic)%>">
+    <%= live_component @socket,
+          TechExperiments1Web.MUMCharacterLive.CharacterComponent,
+          id: character.id,
+          character: character %>
   <% end %>
-
 </div>
 
 

@@ -104,6 +104,12 @@ defmodule TechExperiments1.MUM do
     |> broadcast(:mum_character_updated)
   end
 
+
+  def telelport(%MUMCharacter{} = character) do
+    attrs = %{position_x: :rand.uniform(760), position_y: :rand.uniform(760)}
+    update_mum_character(character, attrs)
+  end
+
   @doc """
   Deletes a mum_character.
 
