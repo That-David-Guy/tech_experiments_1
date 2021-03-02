@@ -1,4 +1,7 @@
 defmodule TechExperiments1Web.MUMCharacterLive.CharacterComponent do
+  @moduledoc """
+  Used for the character icon on the map
+  """
   use TechExperiments1Web, :live_component
 
   alias TechExperiments1.MUM

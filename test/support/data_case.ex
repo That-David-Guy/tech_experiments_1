@@ -13,7 +13,7 @@ defmodule TechExperiments1.DataCase do
   by setting `use TechExperiments1.DataCase, async: true`, although
   this option is not recommended for other databases.
   """
-
+  alias Ecto.Adapters.SQL.Sandbox
   use ExUnit.CaseTemplate
 
   using do
@@ -28,10 +28,10 @@ defmodule TechExperiments1.DataCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(TechExperiments1.Repo)
+    :ok = Sandbox.checkout(TechExperiments1.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(TechExperiments1.Repo, {:shared, self()})
+      Sandbox.mode(TechExperiments1.Repo, {:shared, self()})
     end
 
     :ok

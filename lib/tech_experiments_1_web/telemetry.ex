@@ -1,4 +1,7 @@
 defmodule TechExperiments1Web.Telemetry do
+  @moduledoc """
+  No idea what this module does
+  """
   use Supervisor
   import Telemetry.Metrics
 

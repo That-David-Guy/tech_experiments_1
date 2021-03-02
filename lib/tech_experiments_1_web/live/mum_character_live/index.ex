@@ -1,4 +1,7 @@
 defmodule TechExperiments1Web.MUMCharacterLive.Index do
+  @moduledoc """
+  Main page for the Mutli User Map Tech Experiment
+  """
   use TechExperiments1Web, :live_view
 
   alias TechExperiments1.MUM

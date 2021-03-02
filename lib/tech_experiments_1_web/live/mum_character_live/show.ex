@@ -1,4 +1,7 @@
 defmodule TechExperiments1Web.MUMCharacterLive.Show do
+  @moduledoc """
+  show individual character
+  """
   use TechExperiments1Web, :live_view
 
   alias TechExperiments1.MUM

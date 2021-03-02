@@ -1,4 +1,7 @@
 defmodule TechExperiments1.MUM.MUMCharacter do
+  @moduledoc """
+  For the Multi User Map tech experiment
+  """
   use Ecto.Schema
   import Ecto.Changeset
 

@@ -57,8 +57,7 @@ defmodule TechExperiments1.MUM do
     |> broadcast(:mum_character_created)
   end
 
-
-  def quick_create() do
+  def quick_create do
     # MAKE SURE THIS IS ATOMIC TO AVOID RACE CONDITIONS
     # Is this atomic?
     new_character = fn(x) ->
@@ -76,8 +75,7 @@ defmodule TechExperiments1.MUM do
       |> create_mum_character
   end
 
-
-  def quick_delete() do
+  def quick_delete do
     # MAKE SURE THIS IS ATOMIC TO AVOID RACE CONDITIONS
     last_character = Repo.one(from c in MUMCharacter, order_by: [desc: c.id], limit: 1)
     if last_character != nil do
@@ -103,7 +101,6 @@ defmodule TechExperiments1.MUM do
     |> Repo.update()
     |> broadcast(:mum_character_updated)
   end
-
 
   def telelport(%MUMCharacter{} = character) do
     attrs = %{position_x: :rand.uniform(760), position_y: :rand.uniform(760)}

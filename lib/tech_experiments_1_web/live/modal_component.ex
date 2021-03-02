@@ -1,4 +1,7 @@
 defmodule TechExperiments1Web.ModalComponent do
+  @moduledoc """
+  Modal
+  """
   use TechExperiments1Web, :live_component
 
   @impl true

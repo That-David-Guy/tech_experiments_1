@@ -14,7 +14,7 @@ defmodule TechExperiments1Web.ChannelCase do
   by setting `use TechExperiments1Web.ChannelCase, async: true`, although
   this option is not recommended for other databases.
   """
-
+  alias Ecto.Adapters.SQL.Sandbox
   use ExUnit.CaseTemplate
 
   using do
@@ -29,10 +29,10 @@ defmodule TechExperiments1Web.ChannelCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(TechExperiments1.Repo)
+    :ok = Sandbox.checkout(TechExperiments1.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(TechExperiments1.Repo, {:shared, self()})
+      Sandbox.mode(TechExperiments1.Repo, {:shared, self()})
     end
 
     :ok

@@ -1,4 +1,7 @@
 defmodule TechExperiments1Web.LiveHelpers do
+  @moduledoc """
+  For the create/edit modal
+  """
   import Phoenix.LiveView.Helpers
 
   @doc """

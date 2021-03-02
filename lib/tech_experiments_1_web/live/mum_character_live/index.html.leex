@@ -11,15 +11,15 @@
 <% end %>
 
 <%= cond do %>
-  <%= Enum.count(@mum_characters) <= 0 -> %>
+  <% Enum.count(@mum_characters) <= 0 -> %>
     <a href="#" phx-click="mum_quick_create">Add Player</a> ||
     Remove Player
 
-  <%= Enum.count(@mum_characters) >= 6 -> %>
+  <% Enum.count(@mum_characters) >= 6 -> %>
     Add Player ||
     <a href="#" phx-click="mum_quick_delete">Remove Player</a>
 
-  <%= true -> %>
+  <% true -> %>
     <a href="#" phx-click="mum_quick_create">Add Player</a> ||
     <a href="#" phx-click="mum_quick_delete">Remove Player</a>
 

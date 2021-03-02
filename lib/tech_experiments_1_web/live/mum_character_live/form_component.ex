@@ -1,4 +1,7 @@
 defmodule TechExperiments1Web.MUMCharacterLive.FormComponent do
+  @moduledoc """
+  Form to create a character
+  """
   use TechExperiments1Web, :live_component
 
   alias TechExperiments1.MUM

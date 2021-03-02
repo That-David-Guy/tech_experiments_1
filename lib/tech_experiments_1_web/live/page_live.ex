@@ -1,4 +1,7 @@
 defmodule TechExperiments1Web.PageLive do
+  @moduledoc """
+  Home page
+  """
   use TechExperiments1Web, :live_view
 
   @impl true
