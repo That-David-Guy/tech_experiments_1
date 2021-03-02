@@ -1,0 +1,22 @@
+<h2><%= @title %></h2>
+
+<%= f = form_for @changeset, "#",
+  id: "mum_character-form",
+  phx_target: @myself,
+  phx_change: "validate",
+  phx_submit: "save" %>
+
+  <%= label f, :position_x %>
+  <%= text_input f, :position_x %>
+  <%= error_tag f, :position_x %>
+
+  <%= label f, :position_y %>
+  <%= text_input f, :position_y %>
+  <%= error_tag f, :position_y %>
+
+  <%= label f, :graphic %>
+  <%= text_input f, :graphic %>
+  <%= error_tag f, :graphic %>
+
+  <%= submit "Save", phx_disable_with: "Saving..." %>
+</form>

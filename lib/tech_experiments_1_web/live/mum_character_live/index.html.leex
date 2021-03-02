@@ -1,0 +1,63 @@
+<h1>Multi User Map</h1>
+<p>Sync player movement with Phoenix LiveView</p>
+
+<%= if @live_action in [:new, :edit] do %>
+  <%= live_modal @socket, TechExperiments1Web.MUMCharacterLive.FormComponent,
+    id: @mum_character.id || :new,
+    title: @page_title,
+    action: @live_action,
+    mum_character: @mum_character,
+    return_to: Routes.mum_character_index_path(@socket, :index) %>
+<% end %>
+
+<a href="#" phx-click="mum_quick_create">Add Player</a> ||
+<a href="#" phx-click="mum_quick_delete">Remove Player</a>
+
+<div id="map_containter"
+  style="width: 760px;
+        height: 760px;
+        background: url(mum/map.jpg) #CCC;
+        position: relative;">
+
+  <%= for character <- @mum_characters do %>
+    <img
+      id="character_<%=character.id%>"
+      style="width: 10%;
+            position: absolute;
+            left: <%=character.position_x%>px;
+            top: <%=character.position_y%>px;"
+      src="<%= Routes.static_path(@socket, "/mum/" <> character.graphic)%>">
+  <% end %>
+
+</div>
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Position x</th>
+      <th>Position y</th>
+      <th>Graphic</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="mum_characters">
+    <%= for mum_character <- @mum_characters do %>
+      <tr id="mum_character-<%= mum_character.id %>">
+        <td><%= mum_character.position_x %></td>
+        <td><%= mum_character.position_y %></td>
+        <td><%= mum_character.graphic %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.mum_character_show_path(@socket, :show, mum_character) %></span>
+          <span><%= live_patch "Edit", to: Routes.mum_character_index_path(@socket, :edit, mum_character) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: mum_character.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New Mum character", to: Routes.mum_character_index_path(@socket, :new) %></span>

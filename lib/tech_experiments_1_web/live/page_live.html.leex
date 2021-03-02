@@ -7,7 +7,7 @@
     <h2>Phoenix</h2>
     <ul>
       <li>
-        Multi User Map
+        <%= live_redirect "Multi User Map", to: Routes.mum_character_index_path(@socket, :index) %>
         Sync player movement with Phoenix LiveView
       </li>
     </ul>

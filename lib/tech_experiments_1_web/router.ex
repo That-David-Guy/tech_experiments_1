@@ -20,6 +20,17 @@ defmodule TechExperiments1Web.Router do
     live "/", PageLive, :index
   end
 
+  scope "/", TechExperiments1Web do
+    pipe_through :browser
+
+    live "/multi-user-map", MUMCharacterLive.Index, :index
+    live "/mum_characters/new", MUMCharacterLive.Index, :new
+    live "/mum_characters/:id/edit", MUMCharacterLive.Index, :edit
+
+    live "/mum_characters/:id", MUMCharacterLive.Show, :show
+    live "/mum_characters/:id/show/edit", MUMCharacterLive.Show, :edit
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", TechExperiments1Web do
   #   pipe_through :api

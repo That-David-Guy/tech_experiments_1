@@ -1,0 +1,32 @@
+<h1>Show Mum character</h1>
+
+<%= if @live_action in [:edit] do %>
+  <%= live_modal @socket, TechExperiments1Web.MUMCharacterLive.FormComponent,
+    id: @mum_character.id,
+    title: @page_title,
+    action: @live_action,
+    mum_character: @mum_character,
+    return_to: Routes.mum_character_show_path(@socket, :show, @mum_character) %>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Position x:</strong>
+    <%= @mum_character.position_x %>
+  </li>
+
+  <li>
+    <strong>Position y:</strong>
+    <%= @mum_character.position_y %>
+  </li>
+
+  <li>
+    <strong>Graphic:</strong>
+    <%= @mum_character.graphic %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.mum_character_show_path(@socket, :edit, @mum_character), class: "button" %></span>
+<span><%= live_redirect "Back", to: Routes.mum_character_index_path(@socket, :index) %></span>
