@@ -1,0 +1,30 @@
+<h1>Listing Mum characters</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Position x</th>
+      <th>Position y</th>
+      <th>Graphic</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for mum_character <- @mum_characters do %>
+    <tr>
+      <td><%= mum_character.position_x %></td>
+      <td><%= mum_character.position_y %></td>
+      <td><%= mum_character.graphic %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.mum_character_path(@conn, :show, mum_character) %></span>
+        <span><%= link "Edit", to: Routes.mum_character_path(@conn, :edit, mum_character) %></span>
+        <span><%= link "Delete", to: Routes.mum_character_path(@conn, :delete, mum_character), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Mum character", to: Routes.mum_character_path(@conn, :new) %></span>

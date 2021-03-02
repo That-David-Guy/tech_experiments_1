@@ -11,7 +11,7 @@
   <body>
     <header>
       <section class="container">
-        <span><em>Tech Experiments</em></span>
+        <span><em><%= link "Tech Experiments", to: Routes.page_path(@conn, :index) %></em></span>
         <span>Make<strong>Awesome</strong>Stuff</span>
       </section>
     </header>

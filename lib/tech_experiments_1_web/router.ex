@@ -17,6 +17,8 @@ defmodule TechExperiments1Web.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+
+    resources "/multi-user-map", MUMCharacterController
   end
 
   # Other scopes may use custom stacks.

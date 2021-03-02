@@ -1,0 +1,5 @@
+<h1>Edit Mum character</h1>
+
+<%= render "form.html", Map.put(assigns, :action, Routes.mum_character_path(@conn, :update, @mum_character)) %>
+
+<span><%= link "Back", to: Routes.mum_character_path(@conn, :index) %></span>

@@ -7,7 +7,8 @@
     <h2>Phoenix</h2>
     <ul>
       <li>
-        Multi_User_Map
+        <%= link "Multi User Map", to: Routes.mum_character_path(@conn, :index) %>
+        People share a map and can move characters around.
       </li>
     </ul>
   </article>
