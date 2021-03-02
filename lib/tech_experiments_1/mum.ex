@@ -65,8 +65,8 @@ defmodule TechExperiments1.MUM do
       i = rem(x, 6) + 1 # Only 6 portraits
       %{
         graphic: "portrait_#{i}.jpg",
-        position_x: :rand.uniform(760),
-        position_y: :rand.uniform(760)
+        position_x: :rand.uniform(600),
+        position_y: :rand.uniform(600)
       }
     end
 
@@ -103,7 +103,10 @@ defmodule TechExperiments1.MUM do
   end
 
   def telelport(%MUMCharacter{} = character) do
-    attrs = %{position_x: :rand.uniform(760), position_y: :rand.uniform(760)}
+    attrs = %{
+        position_x: :rand.uniform(600),
+        position_y: :rand.uniform(600)
+      }
     update_mum_character(character, attrs)
   end
 
