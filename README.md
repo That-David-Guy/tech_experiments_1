@@ -32,14 +32,14 @@ To limit to just your app
 
 ## Deploying
 
+`git push` (prod takes from `main` branch on git)
 `ssh tech_experiments_1 ./deploy.sh` from you local machine
 
 
 If you have modified `config/prod.secret.exs` push it to prod with
 `scp config/prod.secret.exs tech_experiments_1:~/tech_experiments_1/config/`
 
-
-
+~~~~~~
 
 To start your Phoenix server:
 
