@@ -1,4 +1,5 @@
 <div id="character_<%=@id%>"
+    phs-hook="draggableCharacters"
     style=" position: absolute;
             left: <%=@character.position_x%>px;
             top: <%=@character.position_y%>px;" >
@@ -10,8 +11,14 @@
 
 
 <script>
+Hooks.draggableCharacters = {
+  mounted(){
+      console.log("mounted")
+  }
+}
+
+
 // FROM https://www.w3schools.com/howto/howto_js_draggable.asp STANDARD HTML
-// Make the DIV element draggable:
 dragElement(document.getElementById("character_<%=@id%>"));
 
 function dragElement(elmnt) {
@@ -52,6 +59,7 @@ function dragElement(elmnt) {
     // stop moving when mouse button is released:
     document.onmouseup = null;
     document.onmousemove = null;
+    // window.liveSocket.pushEvent("teleport", {}) // THIS DOESNT WORK
   }
 }
 </script>
