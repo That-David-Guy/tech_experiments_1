@@ -20,3 +20,6 @@ config :tech_experiments_1, TechExperiments1Web.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+# For when we run tests in prod
+import_config "test.secret.exs"
