@@ -1,9 +1,5 @@
-<script>
-  let Hooks = {};
-</script>
-
 <h1>Multi User Map</h1>
-<p>Sync player movement with Phoenix LiveView</p>
+<p>Sync player movement with Phoenix LiveView. Open in mutliple tabs to see.</p>
 
 <%= if @live_action in [:new, :edit] do %>
   <%= live_modal @socket, TechExperiments1Web.MUMCharacterLive.FormComponent,
@@ -26,12 +22,8 @@
   <% true -> %>
     <a href="#" phx-click="mum_quick_create">Add Player</a> ||
     <a href="#" phx-click="mum_quick_delete">Remove Player</a>
-
-
-
 <% end %>
 
-<div><strong>TODO: Sync up drag events<strong></div>
 <div id="map_containter"
   style="width: 760px;
         height: 760px;

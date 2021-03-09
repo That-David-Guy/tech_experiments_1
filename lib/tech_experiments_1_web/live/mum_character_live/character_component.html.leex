@@ -1,65 +1,23 @@
+<%# NOTE: THIS TIES TO mum.js %>
 <div id="character_<%=@id%>"
-    phs-hook="draggableCharacters"
+    class="mum_draggable"
+    phx-hook="mum_draggableCharacters"
     style=" position: absolute;
-            left: <%=@character.position_x%>px;
-            top: <%=@character.position_y%>px;" >
-    <img style="width: 60px; display: block;"
+            left: 0<%=@character.position_x%>px;
+            top: 0<%=@character.position_y%>px;" >
+    <img id="character_<%=@id%>_draggable" style="width: 60px; display: block;"
         src="<%= Routes.static_path(@socket, "/mum/" <> @character.graphic)%>">
 
     <a href="#" class="button" phx-click="teleport" phx-target="<%= @myself %>">🎉</a>
 </div>
 
-
-<script>
-Hooks.draggableCharacters = {
-  mounted(){
-      console.log("mounted")
-  }
+<style>
+.mum_draggable {
+  transition: left 0.7s ease-out, top 0.7s ease-out;
+  cursor: pointer;
 }
-
-
-// FROM https://www.w3schools.com/howto/howto_js_draggable.asp STANDARD HTML
-dragElement(document.getElementById("character_<%=@id%>"));
-
-function dragElement(elmnt) {
-  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-  elmnt.onmousedown = dragMouseDown;
-  <%# if (document.getElementById(elmnt.id + "header")) {
-    // if present, the header is where you move the DIV from:
-    document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
-  } else {
-    // otherwise, move the DIV from anywhere inside the DIV:
-  } %>
-
-  function dragMouseDown(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // get the mouse cursor position at startup:
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    document.onmouseup = closeDragElement;
-    // call a function whenever the cursor moves:
-    document.onmousemove = elementDrag;
-  }
-
-  function elementDrag(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // calculate the new cursor position:
-    pos1 = pos3 - e.clientX;
-    pos2 = pos4 - e.clientY;
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    // set the element's new position:
-    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-  }
-
-  function closeDragElement() {
-    // stop moving when mouse button is released:
-    document.onmouseup = null;
-    document.onmousemove = null;
-    // window.liveSocket.pushEvent("teleport", {}) // THIS DOESNT WORK
-  }
+.mum_draggable.mum_dragging {
+  transition: none;
+  opacity: 0.8;
 }
-</script>
+</style>
