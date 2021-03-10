@@ -55,7 +55,7 @@ If you have modified `config/prod.secret.exs` push it to prod with
 To start your Phoenix server:
 
   * Setup the project with `mix setup`
-  * Start Phoenix endpoint with `mix phx.server`
+  * Start Phoenix endpoint with `PORT=4000 mix phx.server`
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
