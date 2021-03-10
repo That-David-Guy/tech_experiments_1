@@ -28,7 +28,8 @@
   style="width: 760px;
         height: 760px;
         background: url(mum/map.jpg) #CCC;
-        position: relative;">
+        position: relative;
+        margin-bottom: 30px;">
 
   <%= for character <- @mum_characters do %>
     <%= live_component @socket,
@@ -38,6 +39,13 @@
   <% end %>
 </div>
 
+<p>
+<small>Map was created for the Wayfinder magazine and free for use under the Creative Commons CC-BY-NC-SA license.
+(<a href="http://www.fantasticmaps.com/free-stuff/">http://www.fantasticmaps.com/free-stuff/</a>)</small>
+</p>
+<p>
+<small>Portraits created with <a href="http://dmheroes.com">http://dmheroes.com</a></small>
+</p>
 
 
 <table>
