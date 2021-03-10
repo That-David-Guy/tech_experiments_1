@@ -8,7 +8,7 @@
     <img id="character_<%=@id%>_draggable" style="width: 60px; display: block;"
         src="<%= Routes.static_path(@socket, "/mum/" <> @character.graphic)%>">
 
-    <a href="#" class="button" phx-click="teleport" phx-target="<%= @myself %>">🎉</a>
+    <a href="#" style="max-width: 60px; width: 60px; padding: 0;" class="button" phx-click="teleport" phx-target="<%= @myself %>">🎉</a>
 </div>
 
 <style>
