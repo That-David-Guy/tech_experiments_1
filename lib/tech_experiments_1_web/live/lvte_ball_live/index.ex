@@ -50,14 +50,13 @@ defmodule TechExperiments1Web.LVTEBallLive.Index do
     # {:noreply, "elm_client_intialised", assign(socket, :lvte_balls, list_lvte_balls())}
   end
 
-  def handle_event("test_send_message", _, socket) do
-    require Logger
-    Logger.debug "\n\ntest_send_message\n\n"
-    # Send all information to everyone
-    # {:noreply, socket}
-    # {:noreply, assign(socket, :lvte_balls, list_lvte_balls())}
-    # TODO Should I update the socket? Or use the payload
-    {:noreply, push_event(socket, "elm_client_intialised", %{message: "Hello World From Server"})}
+  def handle_event("new_client_initialised", payload, socket) do
+    latest_balls = list_lvte_balls()
+    updated_socket = assign(socket, :lvte_balls, latest_balls)
+    payload = %{lvte_balls: LVTE.to_list_of_maps(latest_balls)}
+
+    # NOTE:!!! You need to transform the ecto struct to a map before sending as event payload
+    {:noreply, push_event(updated_socket, "new_client_connected", payload)}
   end
 
   def handle_event(event_name, _, socket) do

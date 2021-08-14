@@ -28,8 +28,17 @@ main =
 
 -- PORTS
 
-port sendMessage : String -> Cmd msg
+port sendMessage : MessageForOutside -> Cmd msg
 port messageReciever : (String -> msg) -> Sub msg
+
+type alias MessageForOutside =
+  { event: String
+  , payload: Maybe String 
+  }
+
+elmInitialisedMessage : MessageForOutside
+elmInitialisedMessage =
+  MessageForOutside "new_client_initialised" Nothing
 
 
 -- SUBSCRIPTIONS
@@ -149,11 +158,10 @@ update msg model =
       ( model, Cmd.none )
 
     SendMessageToOutsideElm ->
-      ( model, sendMessage "test_send_message")
+      ( model, sendMessage elmInitialisedMessage)
 
     RecievedMessageFromOutsideElm message ->
       ( GotMessage message, Cmd.none)
-
 
 
 -- VIEW

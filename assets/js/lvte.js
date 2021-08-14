@@ -28,11 +28,12 @@ export function mutateHooks(Hooks) {
             console.log(app)
             //Javascript <-> Elm communication
             app.ports.sendMessage.subscribe(
-                (msg) => this.pushEventTo(`#${this.el.id}`, msg, {})
+                ({event, payload}) => this.pushEventTo(`#${this.el.id}`, event, payload)
             )
 
-            this.handleEvent("elm_client_intialised", 
-                () => app.ports.messageReciever.send("elm_client_intialised")
+            this.handleEvent("new_client_connected", 
+                (payload) => console.log("new_client_connected", payload)
+                // () => app.ports.messageReciever.send("new_client_connected")
             )
 
         }

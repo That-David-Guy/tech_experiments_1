@@ -101,4 +101,17 @@ defmodule TechExperiments1.LVTE do
   def change_lvte_ball(%LVTEBall{} = lvte_ball, attrs \\ %{}) do
     LVTEBall.changeset(lvte_ball, attrs)
   end
+
+
+  def to_list_of_maps(structs) do
+    Enum.map(structs, fn struct ->
+      map = Map.take(struct, [:color, :size])
+    end)
+  end
+
+  def to_list_of_maps(structs) do
+    Enum.map(structs, fn struct ->
+      map = Map.take(struct, [:color, :size])
+    end)
+  end
 end

@@ -5161,8 +5161,51 @@ var $author$project$Main$subscriptions = function (_v0) {
 var $author$project$Main$GotMessage = function (a) {
 	return {$: 'GotMessage', a: a};
 };
+var $author$project$Main$MessageForOutside = F2(
+	function (event, payload) {
+		return {event: event, payload: payload};
+	});
+var $author$project$Main$elmInitialisedMessage = A2($author$project$Main$MessageForOutside, 'new_client_initialised', $elm$core$Maybe$Nothing);
+var $elm$core$Maybe$destruct = F3(
+	function (_default, func, maybe) {
+		if (maybe.$ === 'Just') {
+			var a = maybe.a;
+			return func(a);
+		} else {
+			return _default;
+		}
+	});
+var $elm$json$Json$Encode$null = _Json_encodeNull;
+var $elm$json$Json$Encode$object = function (pairs) {
+	return _Json_wrap(
+		A3(
+			$elm$core$List$foldl,
+			F2(
+				function (_v0, obj) {
+					var k = _v0.a;
+					var v = _v0.b;
+					return A3(_Json_addField, k, v, obj);
+				}),
+			_Json_emptyObject(_Utils_Tuple0),
+			pairs));
+};
 var $elm$json$Json$Encode$string = _Json_wrap;
-var $author$project$Main$sendMessage = _Platform_outgoingPort('sendMessage', $elm$json$Json$Encode$string);
+var $author$project$Main$sendMessage = _Platform_outgoingPort(
+	'sendMessage',
+	function ($) {
+		return $elm$json$Json$Encode$object(
+			_List_fromArray(
+				[
+					_Utils_Tuple2(
+					'event',
+					$elm$json$Json$Encode$string($.event)),
+					_Utils_Tuple2(
+					'payload',
+					function ($) {
+						return A3($elm$core$Maybe$destruct, $elm$json$Json$Encode$null, $elm$json$Json$Encode$string, $);
+					}($.payload))
+				]));
+	});
 var $author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
@@ -5173,7 +5216,7 @@ var $author$project$Main$update = F2(
 			case 'SendMessageToOutsideElm':
 				return _Utils_Tuple2(
 					model,
-					$author$project$Main$sendMessage('test_send_message'));
+					$author$project$Main$sendMessage($author$project$Main$elmInitialisedMessage));
 			default:
 				var message = msg.a;
 				return _Utils_Tuple2(
