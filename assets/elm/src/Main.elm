@@ -11,14 +11,18 @@ import Browser
 import Html exposing (Html, button, div, text)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (style)
+import Maybe.Extra
 import Json.Decode as Decode exposing (Decoder)
+import Json.Decode.Extra as DecodeExtra
+import Json.Encode as Encode
+import Html exposing (a)
 
 
 -- MAIN
 
 main : Program Decode.Value Model Msg
 main =
-  Browser.element
+  Browser.element 
     { init = init
     , view = view 
     , update = update
@@ -26,66 +30,23 @@ main =
     }
 
 
--- PORTS
-
-port sendMessage : MessageForOutside -> Cmd msg
-port messageReciever : (String -> msg) -> Sub msg
-
-type alias MessageForOutside =
-  { event: String
-  , payload: Maybe String 
-  }
-
-elmInitialisedMessage : MessageForOutside
-elmInitialisedMessage =
-  MessageForOutside "new_client_initialised" Nothing
-
-
--- SUBSCRIPTIONS
-
-subscriptions : Model -> Sub Msg
-subscriptions _ =
-  messageReciever RecievedMessageFromOutsideElm
-
--- I NEED TO TRIGGER A CALL HERE. HOW?
--- Look at https://elmprogramming.com/retrieving-data-on-initialization.html
--- https://discourse.elm-lang.org/t/how-call-multiple-endpoint-when-the-page-is-rendered/5985/2
+init : Decode.Value -> ( Model, Cmd Msg)
+init _ = 
+  (Model [] StartedButNoData, (sendMessage elmInitialisedMessage))
+  -- (Model [] StartedButNoData, Cmd.none) 
 
 -- MODEL
 
+type alias Model =
+  { outsideEventsToParse : List OutsideEvent
+  , currentState: CurrentState
+  }
 
-type Model 
+type CurrentState
   = StartedButNoData
   | GotMessage String
   | HasData (List Ball) 
   | DecodeError String 
-
--- JSON is just an array, whereas our model has a record at top level
-fromJson : Decode.Value -> Result Decode.Error (List Ball)
-fromJson =
-  Decode.decodeValue (Decode.list ballDecoder)
-
-
-init : Decode.Value -> ( Model, Cmd Msg)
-init _ = 
-  -- (StartedButNoData, (sendMessage "elm_client_intialised"))
-  (StartedButNoData, Cmd.none) 
-
-
-newElmClientInitiliazed : Cmd Msg
-newElmClientInitiliazed =
-  Cmd.none
-
-
-decodeMessage : Decode.Value -> Model
-decodeMessage json = 
-  case fromJson json of
-    Ok balls ->
-      HasData balls
-    
-    Err reason ->
-      DecodeError (Decode.errorToString reason)
-
 
 type alias Ball = 
   { id : Int
@@ -93,19 +54,170 @@ type alias Ball =
   , color : BallColor
   }
 
-ballDecoder : Decoder Ball
-ballDecoder =
-  Decode.map3
-    Ball
-    (Decode.field "id" Decode.int)
-    (Decode.field "size" (Decode.andThen ballSizeFromString Decode.string))
-    (Decode.field "color" (Decode.andThen ballColorFromString Decode.string))
+type BallColor
+  = Red
+  | Green
+  | Blue
+  | UnknownColor String
 
 type BallSize
   = Small
   | Medium
   | Large
   | UnknownSize String
+
+-- SUBSCRIPTIONS
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+  -- Sub.none
+  messageReciever (fromJson >> RecievedMessageFromOutsideElm)
+
+
+-- PORTS
+
+-- sendMessage will have to change to Json.Encode.Value -> Cmd msg
+port sendMessage : MessageForOutside -> Cmd msg
+port messageReciever : (Encode.Value -> msg) -> Sub msg
+
+type OutsideEvent
+  = NewClientInitialized (List Ball)
+
+fromJson : Decode.Value -> Result Decode.Error OutsideEvent
+fromJson =
+  Decode.decodeValue outsideEventDecoder
+
+  -- Decode.decodeValue (Decode.list ballDecoder
+
+-- == DECODING ATTEMPT 2 using decoders from the Maybe ==
+
+
+log : String -> Decode.Decoder a -> Decode.Decoder a
+log message =
+    Decode.map (Debug.log message)
+
+
+outsideEventDecoder : Decoder OutsideEvent
+outsideEventDecoder =
+  eventNameDecoder
+  |> Decode.andThen chooseFromEventName
+
+-- Choose an implementation
+
+chooseFromEventName : String -> Decoder OutsideEvent
+chooseFromEventName eventName =
+  case eventName of
+      "new_client_initialised" -> newClientInitializedDecoder
+      _ -> Decode.fail ("Unrecognised event name sent to elm: " ++ eventName)
+
+-- Build the OutsideEvent
+newClientInitializedDecoder : Decoder OutsideEvent
+newClientInitializedDecoder =
+  Decode.map NewClientInitialized newClientInitializedEventDataDecoder
+
+newClientInitializedEventDataDecoder : Decoder (List Ball)
+newClientInitializedEventDataDecoder =
+  Decode.field "event_data" listBallDecoder
+
+-- The ball
+listBallDecoder : Decoder (List Ball)
+listBallDecoder =
+  Decode.list ballDecoder
+
+ballDecoder : Decoder Ball
+ballDecoder =
+  Decode.map3
+    Ball
+    (Decode.field "id" Decode.int)
+    (Decode.field "size" (Decode.andThen ballSizeDecoder Decode.string))
+    (Decode.field "color" (Decode.andThen ballColorDecoder Decode.string))
+
+-- Start with the primitives
+eventNameDecoder : Decoder String
+eventNameDecoder =
+  Decode.field "event_name" Decode.string
+
+ballIdDecoder : Decoder Int
+ballIdDecoder =
+  Decode.field "id" Decode.int
+
+-- I don't think this is named right? TODO look at how outsideEventDecoder works
+ballColorDecoder : String -> Decoder BallColor
+ballColorDecoder string =
+  case string of
+    "red" ->
+      Decode.succeed Red
+    "green" ->
+      Decode.succeed Green
+    "blue" ->
+      Decode.succeed Blue
+    _ ->
+      Decode.succeed (UnknownColor string)
+
+ballSizeDecoder : String -> Decoder BallSize
+ballSizeDecoder string =
+  case string of
+    "small" ->
+      Decode.succeed Small
+    "medium" ->
+      Decode.succeed Medium
+    "large" ->
+      Decode.succeed Large
+    _ ->
+      Decode.succeed (UnknownSize string)
+
+
+
+
+
+
+
+-- DECODING
+
+-- is : a -> a -> Bool
+-- is a b =
+--     a == b
+
+-- fromJson : Model -> Decode.Value -> Result Decode.Error Model
+-- fromJson model =
+--   Decode.decodeValue outsideEvent
+--   -- Decode.decodeValue (Decode.list ballDecoder)
+
+-- type OutsideElmEvent
+--   = EventNewClientConnected
+
+
+-- outsideEventName : Decoder OutsideElmEvent
+-- outsideEventName =
+--   Decode.field "event_name" Decode.string
+--     |> Decode.andThen (DecodeExtra.fromResult << outsideEventFromString)
+
+
+-- outsideEventFromString : String -> Result String OutsideElmEvent
+-- outsideEventFromString string =
+--   case string of
+--       "new_client_connected" -> 
+--         Ok EventNewClientConnected
+
+--       _ ->
+--         Err ("Unrecongised event sent to Elm: " ++ string)
+
+
+-- outsideEvent : Decoder Model
+-- outsideEvent =
+--   Decode.oneOf
+--     [ -- DecodeExtra.when outsideEventName (is NewClientConnected) (Decode.list ballDecoder)
+--     ]
+
+
+-- ballDecoder : Decoder Ball
+-- ballDecoder =
+--   Decode.map3
+--     Ball
+--     (Decode.field "id" Decode.int)
+--     (Decode.field "size" (Decode.andThen ballSizeFromString Decode.string))
+--     (Decode.field "color" (Decode.andThen ballColorFromString Decode.string))
+
   
 ballSizeFromString : String -> Decoder BallSize
 ballSizeFromString string =
@@ -119,11 +231,6 @@ ballSizeFromString string =
     _ ->
       Decode.succeed (UnknownSize string)
 
-type BallColor
-  = Red
-  | Green
-  | Blue
-  | UnknownColor String
 
 ballColorFromString : String -> Decoder BallColor
 ballColorFromString string =
@@ -136,6 +243,32 @@ ballColorFromString string =
       Decode.succeed Blue
     _ ->
       Decode.succeed (UnknownColor string)
+-- ENCODING
+
+type alias MessageForOutside =
+  { event: String
+  , payload: Maybe String 
+  }
+
+
+
+
+-- ENCODING AND DECODING
+
+elmInitialisedMessage : MessageForOutside
+elmInitialisedMessage =
+  MessageForOutside "new_client_initialised" Nothing
+
+
+
+
+
+
+newElmClientInitiliazed : Cmd Msg
+newElmClientInitiliazed =
+  Cmd.none
+
+
 
 
 -- UPDATE
@@ -145,7 +278,7 @@ type Msg
   = ChangeColor
   | AddBall
   | SendMessageToOutsideElm
-  | RecievedMessageFromOutsideElm String
+  | RecievedMessageFromOutsideElm (Result Decode.Error OutsideEvent)
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -160,8 +293,13 @@ update msg model =
     SendMessageToOutsideElm ->
       ( model, sendMessage elmInitialisedMessage)
 
-    RecievedMessageFromOutsideElm message ->
-      ( GotMessage message, Cmd.none)
+    RecievedMessageFromOutsideElm outsideEventResult ->
+      case outsideEventResult of
+          Ok (NewClientInitialized balls)->
+            ( { model | currentState = HasData balls }, Cmd.none )
+          
+          Err error ->
+            ( { model | currentState = DecodeError (Decode.errorToString error)}, Cmd.none)
 
 
 -- VIEW
@@ -174,9 +312,9 @@ view model =
     , style "padding" "30px"
     , style "border-radius" "16px"
     ]
-    (case model of
+    (case model.currentState of
         StartedButNoData ->
-          [ text "Loaded but no data"
+          [ text "Loaded but no data. This should go away. "
           , button [ onClick SendMessageToOutsideElm ] [text "test"]
           ]
         HasData balls  ->
@@ -236,4 +374,56 @@ viewBall ball =
     
     
     
-    
+
+
+-- === DECODING ATTEMPT 2 using maybes ===
+
+-- https://thoughtbot.com/blog/getting-unstuck-with-elm-json-decoders
+
+
+
+-- Choose an implementation
+
+maybeOutsideEvent : Maybe OutsideEvent
+maybeOutsideEvent =
+  maybeEventName
+    |> Maybe.andThen chooseFromEventNameMaybeVersion
+
+chooseFromEventNameMaybeVersion : String -> Maybe OutsideEvent
+chooseFromEventNameMaybeVersion eventName =
+  case eventName of
+      "new_client_initialised" -> maybeNewClientInitialized 
+      _ -> Nothing
+
+-- Build the OutsideEvent
+maybeNewClientInitialized : Maybe OutsideEvent
+maybeNewClientInitialized =
+  Maybe.map NewClientInitialized maybeListBall
+
+-- The ball
+maybeListBall : Maybe (List Ball)
+maybeListBall =
+  Just (Maybe.Extra.values [maybeBall])
+
+maybeBall : Maybe Ball
+maybeBall =
+  Maybe.map3 Ball maybeBallId maybeBallSize maybeBallColor
+
+-- Start with the primitives
+maybeEventName : Maybe String
+maybeEventName =
+  Just "new_client_initialised"
+
+maybeBallId : Maybe Int
+maybeBallId =
+  Just 1
+
+maybeBallColor : Maybe BallColor
+maybeBallColor =
+  Just Red
+
+maybeBallSize : Maybe BallSize
+maybeBallSize =
+  Just Small
+
+ 
