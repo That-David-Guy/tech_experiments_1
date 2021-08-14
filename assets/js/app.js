@@ -33,5 +33,8 @@ liveSocket.connect()
 // >> liveSocket.enableLatencySim(1000)
 window.liveSocket = liveSocket
 
-import {mutateHooks} from "./mum.js"
-mutateHooks(Hooks)
+import {mutateHooks as mumMutateHooks} from "./mum.js"
+mumMutateHooks(Hooks)
+
+import {mutateHooks as lvteMutateHooks} from "./lvte.js"
+lvteMutateHooks(Hooks)

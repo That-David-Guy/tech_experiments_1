@@ -53,3 +53,10 @@ Icon?
 Thumbs.db
 *.DS_Store
 
+
+# Elm stuff #
+######################
+elm-stuff
+repl-temp-*
+
+

@@ -1,0 +1,54 @@
+<h1>LiveView to Elm</h1>
+<p>Send messages back and forth between LiveView and Elm. Works across multiple open tabs</p>
+
+<%= if @live_action in [:new, :edit] do %>
+  <%= live_modal @socket, TechExperiments1Web.LVTEBallLive.FormComponent,
+    id: @lvte_ball.id || :new,
+    title: @page_title,
+    action: @live_action,
+    lvte_ball: @lvte_ball,
+    return_to: Routes.lvte_ball_index_path(@socket, :index) %>
+<% end %>
+
+<h2>Elm</h2>
+<%# Javascript file with hook is in assets/js/lvts.js%>
+  <%# data-init-data='<%= raw []@lvte_balls %>
+  <%# data-init-data='[ { id:1, color:"red", size:"medium" }, { id:2, color:"blue", size:"medium" } ]' %>
+  <%# TODO Elm seems to 'replace' this div, loosing me the attributes on it? %>
+
+ <div
+  id="lvte-elm-app"
+  phx-hook="lvte_elmContainer"
+  >
+  <div id="lvte-elm-app-content"></div>
+  </div>
+
+<hr>
+
+<h2>LiveView</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Color</th>
+      <th>Size</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="lvte_balls">
+    <%= for lvte_ball <- @lvte_balls do %>
+      <tr id="lvte_ball-<%= lvte_ball.id %>">
+        <td><%= lvte_ball.color %></td>
+        <td><%= lvte_ball.size %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.lvte_ball_show_path(@socket, :show, lvte_ball) %></span>
+          <span><%= live_patch "Edit", to: Routes.lvte_ball_index_path(@socket, :edit, lvte_ball) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: lvte_ball.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New Lvte ball", to: Routes.lvte_ball_index_path(@socket, :new) %></span>

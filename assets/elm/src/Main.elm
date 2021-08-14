@@ -1,4 +1,4 @@
-module Main exposing (..)
+port module Main exposing (..)
 
 -- Press buttons to increment and decrement a counter.
 --
@@ -26,44 +26,57 @@ main =
     }
 
 
+-- PORTS
+
+port sendMessage : String -> Cmd msg
+port messageReciever : (String -> msg) -> Sub msg
+
+
 -- SUBSCRIPTIONS
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-  Sub.none
+  messageReciever RecievedMessageFromOutsideElm
 
+-- I NEED TO TRIGGER A CALL HERE. HOW?
+-- Look at https://elmprogramming.com/retrieving-data-on-initialization.html
+-- https://discourse.elm-lang.org/t/how-call-multiple-endpoint-when-the-page-is-rendered/5985/2
 
 -- MODEL
 
 
-type alias Model = 
-  { balls : List Ball
-  , decodeMessage: String
-  }
+type Model 
+  = StartedButNoData
+  | GotMessage String
+  | HasData (List Ball) 
+  | DecodeError String 
 
 -- JSON is just an array, whereas our model has a record at top level
 fromJson : Decode.Value -> Result Decode.Error (List Ball)
 fromJson =
   Decode.decodeValue (Decode.list ballDecoder)
 
+
 init : Decode.Value -> ( Model, Cmd Msg)
-init json = 
+init _ = 
+  -- (StartedButNoData, (sendMessage "elm_client_intialised"))
+  (StartedButNoData, Cmd.none) 
+
+
+newElmClientInitiliazed : Cmd Msg
+newElmClientInitiliazed =
+  Cmd.none
+
+
+decodeMessage : Decode.Value -> Model
+decodeMessage json = 
   case fromJson json of
     Ok balls ->
-      ({ balls = balls, decodeMessage = "Successful Decode" }, Cmd.none)
+      HasData balls
     
     Err reason ->
-      ({
-        balls =
-          [ Ball 1 Small Red
-          , Ball 2 Medium Green
-          , Ball 3 Large Blue
-          , Ball 4 (UnknownSize "Kinda Small") (UnknownColor "Reddish")
-          ]
-       , decodeMessage = Decode.errorToString reason
-      }
-      , Cmd.none
-      )
+      DecodeError (Decode.errorToString reason)
+
 
 type alias Ball = 
   { id : Int
@@ -122,6 +135,8 @@ ballColorFromString string =
 type Msg
   = ChangeColor
   | AddBall
+  | SendMessageToOutsideElm
+  | RecievedMessageFromOutsideElm String
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -129,8 +144,15 @@ update msg model =
     AddBall ->
       ( model, Cmd.none )
         -- ( { model | balls  = (Medium, Green) :: model.balls }, Cmd.none)
+
     ChangeColor ->
       ( model, Cmd.none )
+
+    SendMessageToOutsideElm ->
+      ( model, sendMessage "test_send_message")
+
+    RecievedMessageFromOutsideElm message ->
+      ( GotMessage message, Cmd.none)
 
 
 
@@ -144,25 +166,37 @@ view model =
     , style "padding" "30px"
     , style "border-radius" "16px"
     ]
-    [ viewControls
-    , viewBalls model
-    , text model.decodeMessage
-    ]
+    (case model of
+        StartedButNoData ->
+          [ text "Loaded but no data"
+          , button [ onClick SendMessageToOutsideElm ] [text "test"]
+          ]
+        HasData balls  ->
+          [ viewControls
+          , viewBalls balls
+          ]
+        DecodeError errorMessage ->
+          [ text errorMessage 
+          ]
+        GotMessage message ->
+          [ text ( message ++ " :) " )
+          ]
+    )
 
 viewControls : Html Msg
 viewControls =
  div []
   [ button [ onClick AddBall] [ text "Add Ball" ] ]
 
-viewBalls : Model -> Html Msg
-viewBalls model =
+viewBalls : List Ball -> Html Msg
+viewBalls balls =
   div 
       [ style "display" "flex"
       , style "justify-content" "center"
       , style "align-items" "center"
       , style "padding" "15px"
       ] 
-      <| List.map viewBall model.balls 
+      <| List.map viewBall balls 
   
   
 viewBall : Ball -> Html Msg

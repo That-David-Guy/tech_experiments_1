@@ -58,6 +58,8 @@ export function mutateHooks(Hooks) {
             // NOTE: pushEventTo to go to the component, use pushEvent to go to the liveView
             const onCloseDragElement = (position_x, position_y) => 
               this.pushEventTo(`#${this.el.id}`, "dragged", {position_x, position_y})
+            
+
             dragElement(this.el, onCloseDragElement)
         }
     }

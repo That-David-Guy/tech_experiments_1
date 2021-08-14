@@ -1,0 +1,22 @@
+<h2><%= @title %></h2>
+
+<%= f = form_for @changeset, "#",
+  id: "lvte_ball-form",
+  phx_target: @myself,
+  phx_change: "validate",
+  phx_submit: "save" %>
+
+
+  <%= label f, :color %>
+  <%= text_input f, :color %>
+  <%= error_tag f, :color %>
+  <p>Colors: red, green, blue</p>
+
+
+  <%= label f, :size %>
+  <%= text_input f, :size %>
+  <%= error_tag f, :size %>
+  <p>Sizes: small, medium, large</p>
+
+  <%= submit "Save", phx_disable_with: "Saving..." %>
+</form>

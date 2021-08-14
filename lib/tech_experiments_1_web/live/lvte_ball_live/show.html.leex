@@ -1,0 +1,27 @@
+<h1>Show Lvte ball</h1>
+
+<%= if @live_action in [:edit] do %>
+  <%= live_modal @socket, TechExperiments1Web.LVTEBallLive.FormComponent,
+    id: @lvte_ball.id,
+    title: @page_title,
+    action: @live_action,
+    lvte_ball: @lvte_ball,
+    return_to: Routes.lvte_ball_show_path(@socket, :show, @lvte_ball) %>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Color:</strong>
+    <%= @lvte_ball.color %>
+  </li>
+
+  <li>
+    <strong>Size:</strong>
+    <%= @lvte_ball.size %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.lvte_ball_show_path(@socket, :edit, @lvte_ball), class: "button" %></span>
+<span><%= live_redirect "Back", to: Routes.lvte_ball_index_path(@socket, :index) %></span>

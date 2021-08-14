@@ -31,6 +31,17 @@ defmodule TechExperiments1Web.Router do
     live "/mum_characters/:id/show/edit", MUMCharacterLive.Show, :edit
   end
 
+  scope "/", TechExperiments1Web do
+    pipe_through :browser
+
+    live "/lvte_balls", LVTEBallLive.Index, :index
+    live "/lvte_balls/new", LVTEBallLive.Index, :new
+    live "/lvte_balls/:id/edit", LVTEBallLive.Index, :edit
+
+    live "/lvte_balls/:id", LVTEBallLive.Show, :show
+    live "/lvte_balls/:id/show/edit", LVTEBallLive.Show, :edit
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", TechExperiments1Web do
   #   pipe_through :api
