@@ -31,9 +31,13 @@ export function mutateHooks(Hooks) {
                 ({event, payload}) => this.pushEventTo(`#${this.el.id}`, event, payload)
             )
 
-            this.handleEvent("new_client_connected", 
-                (payload) => console.log("new_client_connected", payload)
-                // () => app.ports.messageReciever.send("new_client_connected")
+            this.handleEvent("new_client_initialised", 
+                // (payload) => console.log(payload)
+                // (payload) => app.ports.messageReciever.send(
+                //     { event_data: [{color: "blue", id: 1, size: "medium"}], 
+                //       event_name: "new_client_initialised"
+                //     })
+                (payload) => app.ports.messageReciever.send(payload)
             )
 
         }

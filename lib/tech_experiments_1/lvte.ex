@@ -105,13 +105,7 @@ defmodule TechExperiments1.LVTE do
 
   def to_list_of_maps(structs) do
     Enum.map(structs, fn struct ->
-      map = Map.take(struct, [:color, :size])
-    end)
-  end
-
-  def to_list_of_maps(structs) do
-    Enum.map(structs, fn struct ->
-      map = Map.take(struct, [:color, :size])
+      map = Map.take(struct, [:id, :color, :size])
     end)
   end
 end

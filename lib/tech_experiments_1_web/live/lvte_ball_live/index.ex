@@ -53,10 +53,13 @@ defmodule TechExperiments1Web.LVTEBallLive.Index do
   def handle_event("new_client_initialised", payload, socket) do
     latest_balls = list_lvte_balls()
     updated_socket = assign(socket, :lvte_balls, latest_balls)
-    payload = %{lvte_balls: LVTE.to_list_of_maps(latest_balls)}
+    payload = %{
+      event_name: "new_client_initialised",
+      event_data: LVTE.to_list_of_maps(latest_balls)
+    }
 
     # NOTE:!!! You need to transform the ecto struct to a map before sending as event payload
-    {:noreply, push_event(updated_socket, "new_client_connected", payload)}
+    {:noreply, push_event(updated_socket, payload.event_name, payload)}
   end
 
   def handle_event(event_name, _, socket) do

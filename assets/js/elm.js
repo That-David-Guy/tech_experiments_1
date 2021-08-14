@@ -5144,23 +5144,11 @@ var $elm$core$Task$perform = F2(
 				A2($elm$core$Task$map, toMessage, task)));
 	});
 var $elm$browser$Browser$element = _Browser_element;
+var $author$project$Main$Model = F2(
+	function (outsideEventsToParse, currentState) {
+		return {currentState: currentState, outsideEventsToParse: outsideEventsToParse};
+	});
 var $author$project$Main$StartedButNoData = {$: 'StartedButNoData'};
-var $elm$core$Platform$Cmd$batch = _Platform_batch;
-var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
-var $author$project$Main$init = function (_v0) {
-	return _Utils_Tuple2($author$project$Main$StartedButNoData, $elm$core$Platform$Cmd$none);
-};
-var $author$project$Main$RecievedMessageFromOutsideElm = function (a) {
-	return {$: 'RecievedMessageFromOutsideElm', a: a};
-};
-var $elm$json$Json$Decode$string = _Json_decodeString;
-var $author$project$Main$messageReciever = _Platform_incomingPort('messageReciever', $elm$json$Json$Decode$string);
-var $author$project$Main$subscriptions = function (_v0) {
-	return $author$project$Main$messageReciever($author$project$Main$RecievedMessageFromOutsideElm);
-};
-var $author$project$Main$GotMessage = function (a) {
-	return {$: 'GotMessage', a: a};
-};
 var $author$project$Main$MessageForOutside = F2(
 	function (event, payload) {
 		return {event: event, payload: payload};
@@ -5206,6 +5194,111 @@ var $author$project$Main$sendMessage = _Platform_outgoingPort(
 					}($.payload))
 				]));
 	});
+var $author$project$Main$init = function (_v0) {
+	return _Utils_Tuple2(
+		A2($author$project$Main$Model, _List_Nil, $author$project$Main$StartedButNoData),
+		$author$project$Main$sendMessage($author$project$Main$elmInitialisedMessage));
+};
+var $author$project$Main$RecievedMessageFromOutsideElm = function (a) {
+	return {$: 'RecievedMessageFromOutsideElm', a: a};
+};
+var $elm$core$Basics$composeR = F3(
+	function (f, g, x) {
+		return g(
+			f(x));
+	});
+var $elm$json$Json$Decode$decodeValue = _Json_run;
+var $elm$json$Json$Decode$andThen = _Json_andThen;
+var $elm$json$Json$Decode$fail = _Json_fail;
+var $author$project$Main$NewClientInitialized = function (a) {
+	return {$: 'NewClientInitialized', a: a};
+};
+var $elm$json$Json$Decode$field = _Json_decodeField;
+var $author$project$Main$Ball = F3(
+	function (id, size, color) {
+		return {color: color, id: id, size: size};
+	});
+var $author$project$Main$Blue = {$: 'Blue'};
+var $author$project$Main$Green = {$: 'Green'};
+var $author$project$Main$Red = {$: 'Red'};
+var $author$project$Main$UnknownColor = function (a) {
+	return {$: 'UnknownColor', a: a};
+};
+var $author$project$Main$ballColorDecoder = function (string) {
+	switch (string) {
+		case 'red':
+			return $elm$json$Json$Decode$succeed($author$project$Main$Red);
+		case 'green':
+			return $elm$json$Json$Decode$succeed($author$project$Main$Green);
+		case 'blue':
+			return $elm$json$Json$Decode$succeed($author$project$Main$Blue);
+		default:
+			return $elm$json$Json$Decode$succeed(
+				$author$project$Main$UnknownColor(string));
+	}
+};
+var $author$project$Main$Large = {$: 'Large'};
+var $author$project$Main$Medium = {$: 'Medium'};
+var $author$project$Main$Small = {$: 'Small'};
+var $author$project$Main$UnknownSize = function (a) {
+	return {$: 'UnknownSize', a: a};
+};
+var $author$project$Main$ballSizeDecoder = function (string) {
+	switch (string) {
+		case 'small':
+			return $elm$json$Json$Decode$succeed($author$project$Main$Small);
+		case 'medium':
+			return $elm$json$Json$Decode$succeed($author$project$Main$Medium);
+		case 'large':
+			return $elm$json$Json$Decode$succeed($author$project$Main$Large);
+		default:
+			return $elm$json$Json$Decode$succeed(
+				$author$project$Main$UnknownSize(string));
+	}
+};
+var $elm$json$Json$Decode$int = _Json_decodeInt;
+var $elm$json$Json$Decode$map3 = _Json_map3;
+var $elm$json$Json$Decode$string = _Json_decodeString;
+var $author$project$Main$ballDecoder = A4(
+	$elm$json$Json$Decode$map3,
+	$author$project$Main$Ball,
+	A2($elm$json$Json$Decode$field, 'id', $elm$json$Json$Decode$int),
+	A2(
+		$elm$json$Json$Decode$field,
+		'size',
+		A2($elm$json$Json$Decode$andThen, $author$project$Main$ballSizeDecoder, $elm$json$Json$Decode$string)),
+	A2(
+		$elm$json$Json$Decode$field,
+		'color',
+		A2($elm$json$Json$Decode$andThen, $author$project$Main$ballColorDecoder, $elm$json$Json$Decode$string)));
+var $elm$json$Json$Decode$list = _Json_decodeList;
+var $author$project$Main$listBallDecoder = $elm$json$Json$Decode$list($author$project$Main$ballDecoder);
+var $author$project$Main$newClientInitializedEventDataDecoder = A2($elm$json$Json$Decode$field, 'event_data', $author$project$Main$listBallDecoder);
+var $author$project$Main$newClientInitializedDecoder = A2($elm$json$Json$Decode$map, $author$project$Main$NewClientInitialized, $author$project$Main$newClientInitializedEventDataDecoder);
+var $author$project$Main$chooseFromEventName = function (eventName) {
+	if (eventName === 'new_client_initialised') {
+		return $author$project$Main$newClientInitializedDecoder;
+	} else {
+		return $elm$json$Json$Decode$fail('Unrecognised event name sent to elm: ' + eventName);
+	}
+};
+var $author$project$Main$eventNameDecoder = A2($elm$json$Json$Decode$field, 'event_name', $elm$json$Json$Decode$string);
+var $author$project$Main$outsideEventDecoder = A2($elm$json$Json$Decode$andThen, $author$project$Main$chooseFromEventName, $author$project$Main$eventNameDecoder);
+var $author$project$Main$fromJson = $elm$json$Json$Decode$decodeValue($author$project$Main$outsideEventDecoder);
+var $elm$json$Json$Decode$value = _Json_decodeValue;
+var $author$project$Main$messageReciever = _Platform_incomingPort('messageReciever', $elm$json$Json$Decode$value);
+var $author$project$Main$subscriptions = function (model) {
+	return $author$project$Main$messageReciever(
+		A2($elm$core$Basics$composeR, $author$project$Main$fromJson, $author$project$Main$RecievedMessageFromOutsideElm));
+};
+var $author$project$Main$DecodeError = function (a) {
+	return {$: 'DecodeError', a: a};
+};
+var $author$project$Main$HasData = function (a) {
+	return {$: 'HasData', a: a};
+};
+var $elm$core$Platform$Cmd$batch = _Platform_batch;
+var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
@@ -5218,13 +5311,29 @@ var $author$project$Main$update = F2(
 					model,
 					$author$project$Main$sendMessage($author$project$Main$elmInitialisedMessage));
 			default:
-				var message = msg.a;
-				return _Utils_Tuple2(
-					$author$project$Main$GotMessage(message),
-					$elm$core$Platform$Cmd$none);
+				var outsideEventResult = msg.a;
+				if (outsideEventResult.$ === 'Ok') {
+					var balls = outsideEventResult.a.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								currentState: $author$project$Main$HasData(balls)
+							}),
+						$elm$core$Platform$Cmd$none);
+				} else {
+					var error = outsideEventResult.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								currentState: $author$project$Main$DecodeError(
+									$elm$json$Json$Decode$errorToString(error))
+							}),
+						$elm$core$Platform$Cmd$none);
+				}
 		}
 	});
-var $elm$json$Json$Decode$value = _Json_decodeValue;
 var $author$project$Main$SendMessageToOutsideElm = {$: 'SendMessageToOutsideElm'};
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$html$Html$div = _VirtualDom_node('div');
@@ -5328,11 +5437,12 @@ var $author$project$Main$view = function (model) {
 				A2($elm$html$Html$Attributes$style, 'border-radius', '16px')
 			]),
 		function () {
-			switch (model.$) {
+			var _v0 = model.currentState;
+			switch (_v0.$) {
 				case 'StartedButNoData':
 					return _List_fromArray(
 						[
-							$elm$html$Html$text('Loaded but no data'),
+							$elm$html$Html$text('Loaded but no data. This should go away. '),
 							A2(
 							$elm$html$Html$button,
 							_List_fromArray(
@@ -5345,20 +5455,20 @@ var $author$project$Main$view = function (model) {
 								]))
 						]);
 				case 'HasData':
-					var balls = model.a;
+					var balls = _v0.a;
 					return _List_fromArray(
 						[
 							$author$project$Main$viewControls,
 							$author$project$Main$viewBalls(balls)
 						]);
 				case 'DecodeError':
-					var errorMessage = model.a;
+					var errorMessage = _v0.a;
 					return _List_fromArray(
 						[
 							$elm$html$Html$text(errorMessage)
 						]);
 				default:
-					var message = model.a;
+					var message = _v0.a;
 					return _List_fromArray(
 						[
 							$elm$html$Html$text(message + ' :) ')
