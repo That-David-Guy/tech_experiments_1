@@ -41,14 +41,14 @@ defmodule TechExperiments1Web.LVTEBallLive.Index do
     {:noreply, assign(socket, :lvte_balls, list_lvte_balls())}
   end
 
-  def handle_event("elm_client_intialised", _, socket) do
-    require Logger
-    Logger.debug "\n\nelm_client_intialised\n\n"
-    # Send all information to everyone
-    {:noreply, socket}
-    # {:noreply, assign(socket, :lvte_balls, list_lvte_balls())}
-    # {:noreply, "elm_client_intialised", assign(socket, :lvte_balls, list_lvte_balls())}
-  end
+  # def handle_event("elm_client_intialised", _, socket) do
+  #   require Logger
+  #   Logger.debug "\n\nelm_client_intialised\n\n"
+  #   # Send all information to everyone
+  #   {:noreply, socket}
+  #   # {:noreply, assign(socket, :lvte_balls, list_lvte_balls())}
+  #   # {:noreply, "elm_client_intialised", assign(socket, :lvte_balls, list_lvte_balls())}
+  # end
 
   def handle_event("new_client_initialised", payload, socket) do
     latest_balls = list_lvte_balls()

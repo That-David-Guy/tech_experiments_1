@@ -15,7 +15,6 @@ import Maybe.Extra
 import Json.Decode as Decode exposing (Decoder)
 import Json.Decode.Extra as DecodeExtra
 import Json.Encode as Encode
-import Html exposing (a)
 
 
 -- MAIN
@@ -82,6 +81,7 @@ port messageReciever : (Encode.Value -> msg) -> Sub msg
 
 type OutsideEvent
   = NewClientInitialized (List Ball)
+
 
 fromJson : Decode.Value -> Result Decode.Error OutsideEvent
 fromJson =
