@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Future Fables Icon 36 x 36</title>
+    <g id="Future-Fables-Icon-36-x-36" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Future-Fables-Icon">
+            <rect id="Rectangle" fill="#DB0309" x="0" y="0" width="36" height="36" rx="18"></rect>
+            <g id="Group" transform="translate(2.040000, 2.280000)">
+                <circle id="Oval" fill="#FFFFFF" cx="15.96" cy="15.96" r="15.96"></circle>
+                <path d="M0,18.48 C5.96305871,20.2248335 11.2830587,23.4633787 15.96,28.1956356 C20.8901897,23.6891332 26.2101897,20.450588 31.92,18.48 C31.92,19.5225589 28.8072311,31.92 15.96,31.92 C3.11276888,31.92 0,19.5225589 0,18.48 Z" id="Path" fill="#DB0309"></path>
+                <polygon id="Triangle" fill="#E2870B" transform="translate(15.960000, 18.540000) scale(1, -1) translate(-15.960000, -18.540000) " points="15.96 7.8 25.9044444 29.28 6.01555556 29.28"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>
