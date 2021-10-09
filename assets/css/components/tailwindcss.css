@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .tailwindcss_example h1 {
+        @apply text-3xl mb-2 font-semibold tracking-wide;
+    }
+
+    .tailwindcss_example h2 {
+        @apply text-3xl mb-8 font-semibold tracking-wide
+    }
+
+    .tailwindcss_example h3 {
+        @apply text-xl font-semibold tracking-wide mt-3
+    }
+
+    .tailwindcss_example {
+        @apply font-light;
+    }
+}
