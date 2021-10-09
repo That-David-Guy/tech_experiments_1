@@ -73,6 +73,7 @@ defmodule TechExperiments1.LVTE do
     |> Repo.update()
   end
 
+
   @doc """
   Deletes a lvte_ball.
 
@@ -105,7 +106,7 @@ defmodule TechExperiments1.LVTE do
 
   def to_list_of_maps(structs) do
     Enum.map(structs, fn struct ->
-      map = Map.take(struct, [:id, :color, :size])
+      Map.take(struct, [:id, :color, :size])
     end)
   end
 end

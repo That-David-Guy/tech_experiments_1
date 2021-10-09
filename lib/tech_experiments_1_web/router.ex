@@ -42,6 +42,12 @@ defmodule TechExperiments1Web.Router do
     live "/lvte_balls/:id/show/edit", LVTEBallLive.Show, :edit
   end
 
+  scope "/", TechExperiments1Web do
+    pipe_through :browser
+
+    live "/tailwindcss", TailwindcssLive.Index, :index
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", TechExperiments1Web do
   #   pipe_through :api

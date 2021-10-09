@@ -7,6 +7,10 @@
     <h2>Phoenix</h2>
     <ul>
       <li>
+        <%= live_redirect "TailwindCSS", to: Routes.tailwindcss_index_path(@socket, :index) %>
+        Example of how to use <a href="https://tailwindcss.com">https://tailwindcss.com</a>
+      </li>
+      <li>
         <%= live_redirect "LiveView to Elm", to: Routes.lvte_ball_index_path(@socket, :index) %>
         Communicating between LiveView and Elm frontend
       </li>
